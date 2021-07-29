@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from 'react';
+import { connect } from 'react-redux';
 
-function App() {
+import { getMovieList } from './redux/actions/movieList.actions';
+
+let App = ({ movieList, getMovieList  }) => {
+  useEffect(() => {
+    getMovieList();
+  }, [getMovieList])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>My Movie List</h1>
+      {
+        movieList && movieList.list && movieList.list.map((movie) => (
+          <div key={movie.imdbID}>
+            <img src={movie.Poster} alt={`${movie.Title} poster`} />
+            <h3>{ movie.Title }</h3>
+          </div>
+        ))
+      }
     </div>
   );
 }
+
+const mapStateToProps = state => ({
+  movieList: state.movieListReducer,
+});
+
+App = connect(
+  mapStateToProps,
+  { getMovieList }
+)(App)
 
 export default App;
