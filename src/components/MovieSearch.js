@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { connect } from 'react-redux';
+
+import { addMovieToList } from '../redux/actions/movieList.actions';
 
 import MovieApiService from '../services/movieApi.service';
 
 import SearchBar from './SearchBar';
 
-const MovieSearch = () => {
+let MovieSearch = ({ addMovieToList }) => {
     const movieApiService = new MovieApiService();
 
     const [searchResults, setSearchResults] = useState(); 
@@ -14,8 +17,10 @@ const MovieSearch = () => {
         setSearchResults(results.Search);
     }
 
-    const addMovieToList = (id) => {
-        console.log(id);
+    const addToMovieList = async (id) => {
+        const result = await movieApiService.getMovieById(id);
+
+        addMovieToList(result);
     }
 
     return (
@@ -26,12 +31,17 @@ const MovieSearch = () => {
                     <div key={movie.imdbID}>
                         <img src={movie.Poster} alt={`${movie.Title} poster`} />
                         <h3>{ movie.Title }</h3>
-                        <button onClick={() => addMovieToList(movie.imdbID)}>Add To List</button>
+                        <button onClick={() => addToMovieList(movie.imdbID)}>Add To List</button>
                     </div>
                 ))
             }
         </div>
     )
 }
+
+MovieSearch = connect(
+    null,
+    { addMovieToList }
+)(MovieSearch)
 
 export default MovieSearch;
