@@ -5,10 +5,12 @@ import App from './App';
 import MovieSearch from './components/MovieSearch';
 
 import configureStore from './redux/store';
+import Navbar from './components/Navbar';
 
 ReactDOM.render(
   <Provider store={configureStore()}>
     <Router>
+      <Navbar/> 
       <Switch>
         <Route exact path="/" component={MovieSearch} />
         <Route exact path="/movie-list" component={App} />
